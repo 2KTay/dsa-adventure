@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Slider } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import * as Haptics from 'expo-haptics';
 
 const INITIAL_BARS = [64, 34, 25, 12, 22, 11, 90, 45, 78, 33];

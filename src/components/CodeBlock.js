@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Clipboard } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 
 function tokenize(line) {
   const tokens = [];
@@ -73,7 +74,7 @@ export default function CodeBlock({ code, timeComplexity, spaceComplexity }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
-    Clipboard.setString(code);
+    Clipboard.setStringAsync(code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
