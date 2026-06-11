@@ -27,6 +27,9 @@
       "output": "single",
       "name": "DSA Adventure",
       "shortName": "DSA"
+    },
+    "experiments": {
+      "baseUrl": "/dsa-adventure"
     }
   }
 }
