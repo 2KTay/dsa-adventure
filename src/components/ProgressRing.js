@@ -1,53 +1,41 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, Animated, StyleSheet } from 'react-native';
-import Svg, { Circle } from 'react-native-svg';
-
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export default function ProgressRing({ progress = 0, size = 120, strokeWidth = 10, color = '#7c3aed', label }) {
-  const animatedProgress = useRef(new Animated.Value(0)).current;
-  const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
+  const animWidth = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.timing(animatedProgress, {
+    Animated.timing(animWidth, {
       toValue: progress,
-      duration: 1000,
+      duration: 900,
       useNativeDriver: false,
     }).start();
   }, [progress]);
 
-  const strokeDashoffset = animatedProgress.interpolate({
-    inputRange: [0, 1],
-    outputRange: [circumference, 0],
-  });
-
   return (
-    <View style={styles.container}>
-      <Svg width={size} height={size}>
-        <Circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          stroke="#1e1e3a"
-          strokeWidth={strokeWidth}
-          fill="none"
-        />
-        <AnimatedCircle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          stroke={color}
-          strokeWidth={strokeWidth}
-          fill="none"
-          strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
-          strokeLinecap="round"
-          rotation="-90"
-          origin={`${size / 2}, ${size / 2}`}
-        />
-      </Svg>
-      <View style={[styles.labelContainer, { width: size, height: size }]}>
+    <View style={[styles.container, { width: size, height: size }]}>
+      {/* Background track */}
+      <View style={[styles.track, { width: size, height: size, borderRadius: size / 2, borderWidth: strokeWidth, borderColor: '#1e1e3a' }]} />
+      {/* Filled arc — clipped left half */}
+      <Animated.View
+        style={[
+          styles.fill,
+          {
+            width: size,
+            height: size,
+            borderRadius: size / 2,
+            borderWidth: strokeWidth,
+            borderColor: color,
+            borderRightColor: animWidth.interpolate({ inputRange: [0, 0.5, 1], outputRange: ['transparent', 'transparent', color] }),
+            borderBottomColor: animWidth.interpolate({ inputRange: [0, 0.25, 1], outputRange: ['transparent', color, color] }),
+            transform: [{
+              rotate: animWidth.interpolate({ inputRange: [0, 1], outputRange: ['-90deg', '270deg'] }),
+            }],
+          },
+        ]}
+      />
+      {/* Label */}
+      <View style={styles.labelContainer}>
         <Text style={styles.percent}>{Math.round(progress * 100)}%</Text>
         {label && <Text style={styles.label}>{label}</Text>}
       </View>
@@ -60,8 +48,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  labelContainer: {
+  track: {
     position: 'absolute',
+  },
+  fill: {
+    position: 'absolute',
+  },
+  labelContainer: {
     alignItems: 'center',
     justifyContent: 'center',
   },
