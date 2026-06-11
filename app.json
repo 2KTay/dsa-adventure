@@ -24,7 +24,7 @@
     "web": {
       "favicon": "./assets/icon.png",
       "bundler": "metro",
-      "output": "static",
+      "output": "single",
       "name": "DSA Adventure",
       "shortName": "DSA"
     }
