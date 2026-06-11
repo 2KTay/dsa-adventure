@@ -2,6 +2,9 @@
 
 Interactive DSA learning app with LeetCode interview prep. Kid-friendly explanations + real interview problems.
 
+## Live App
+**https://2ktay.github.io/dsa-adventure**
+
 ## Run Locally
 ```bash
 git clone https://github.com/2KTay/dsa-adventure
